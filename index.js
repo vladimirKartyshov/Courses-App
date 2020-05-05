@@ -33,10 +33,10 @@ const PORT = process.env.PORT || 3000
 //оборачиваем в async для более удобной работы с promise
 async function start() {
     try {
-        const url = 'mongodb+srv://vladimir:cJhQrW@W2CJfngg@cluster0-vbmej.mongodb.net/test?retryWrites=true&w=majority'
+        const url = `mongodb+srv://vladimir:otAQZc9TDc2rKODI@cluster0-vbmej.mongodb.net/shop`
         await mongoose.connect(url, {useNewUrlParser:true})
         app.listen(PORT, () => {
-            console.log('Server is running on port....')
+            console.log('Server is running on port......')
         })
     }catch (e) {
         console.log(e)
