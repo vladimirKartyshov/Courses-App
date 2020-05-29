@@ -14,8 +14,10 @@ const coursesRoutes = require('./routes/courses')
 const authRoutes = require('./routes/auth')
 const varMiddleware = require('./middleware/variables')
 const userMiddleware = require('./middleware/user')
+const keys = require('./keys')
 
-const MONGODB_URI = `mongodb+srv://vladimir:otAQZc9TDc2rKODI@cluster0-vbmej.mongodb.net/shop`
+const PORT = process.env.PORT || 3000
+
 const app = express()
 const hbs = exphbs.create({
     defaultLayout: 'main',
@@ -23,7 +25,7 @@ const hbs = exphbs.create({
 })
 const store = new MongoStore({
     collection: 'sessions',
-    uri: MONGODB_URI
+    uri: keys.MONGODB_URI
 })
 
 app.engine('hbs', hbs.engine)
@@ -33,7 +35,7 @@ app.set('views', 'views')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
 app.use(session({
-    secret: 'some secret value',
+    secret: keys.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store
@@ -50,12 +52,10 @@ app.use('/card', cardRoutes)
 app.use('/orders', ordersRoutes)
 app.use('/auth', authRoutes)
 
-const PORT = process.env.PORT || 3000
-
 //оборачиваем в async для более удобной работы с promise
 async function start() {
     try {
-        await mongoose.connect(MONGODB_URI, {
+        await mongoose.connect(keys.MONGODB_URI, {
             useNewUrlParser:true,
             useFindAndModify: false,
             useUnifiedTopology: true
